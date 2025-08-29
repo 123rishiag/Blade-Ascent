@@ -8,27 +8,27 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Knight_MAT2
-    second: {fileID: 2100000, guid: b7dc48d512a107a4c867d32f16cddaaa, type: 2}
+    second: {fileID: 2100000, guid: e2565d67c374cee47af967617975aa13, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Knight_diffuse
-    second: {fileID: 2800000, guid: a5013d3d8e79b384486d67bd9dd2bcbe, type: 3}
+    second: {fileID: 2800000, guid: 37a4b0b481dbbc14a86234e0dde47ce1, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Knight_normal
-    second: {fileID: 2800000, guid: aa6ab513967d71446a17ceb6b3371d04, type: 3}
+    second: {fileID: 2800000, guid: 99e163fbb223b3d47bce2cd2970d2d59, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Knight_specular
-    second: {fileID: 2800000, guid: d7f1ecc717de3c542bfdedd5cfd350ef, type: 3}
+    second: {fileID: 2800000, guid: 3ecbb268c4976e34aa3b4a2f4bbdf977, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0

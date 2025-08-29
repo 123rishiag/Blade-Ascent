@@ -3,8 +3,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform followTarget;
-    [SerializeField] private Vector3 followDistanceVector = new Vector3(0f, 1f, -5f);
-    [SerializeField] private Vector2 verticalRotationAngleRange = new Vector2(-20f, 10f);
+    [SerializeField] private Vector3 followDistanceVector = new Vector3(0f, 1f, -3f);
+    [SerializeField] private Vector2 verticalRotationAngleRange = new Vector2(-30f, 15f);
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private bool invertMouseXAxis = false;
     [SerializeField] private bool invertMouseYAxis = false;
@@ -18,7 +18,12 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update()
+    private void LateUpdate()
+    {
+        SetCamera();
+    }
+
+    private void SetCamera()
     {
         int invertMouseYAxisVal = invertMouseYAxis ? -1 : 1;
         rotationX += Input.GetAxis("Mouse Y") * mouseSensitivity * invertMouseYAxisVal * Time.deltaTime;

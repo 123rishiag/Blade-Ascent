@@ -4,7 +4,7 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform followTarget;
     [SerializeField] private Vector3 followDistanceVector = new Vector3(0f, 1f, -5f);
-    [SerializeField] private Vector2 verticalRotationAngleRange = new Vector2(-20f, 20f);
+    [SerializeField] private Vector2 verticalRotationAngleRange = new Vector2(-20f, 10f);
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private bool invertMouseXAxis = false;
     [SerializeField] private bool invertMouseYAxis = false;
@@ -31,4 +31,6 @@ public class CameraController : MonoBehaviour
         transform.position = followTarget.position + targetRotation * followDistanceVector;
         transform.rotation = targetRotation;
     }
+
+    public Quaternion GetPlanarRotation() => Quaternion.Euler(0f, rotationY, 0f);
 }

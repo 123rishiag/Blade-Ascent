@@ -6,18 +6,30 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private CharacterController characterController;
+
+    [Header("Locomotion Variables")]
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float accelerationSpeed = 3f;
+    [SerializeField] private float decelerationSpeed = 3f;
     [SerializeField] private float rotationSpeed = 500f;
 
+    [Header("Ground Check Variables")]
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private Vector3 groundCheckOffset = new Vector3(0f, 0.1f, 0.07f);
     [SerializeField] private LayerMask groundLayer;
 
+    // Private Variables
+    private Vector3 lastMoveDirection;
+    private float currentSpeed;
+    private float verticalVelocity;
     private Quaternion targetRotation;
     private bool isGrounded;
 
     private void Start()
     {
+        lastMoveDirection = Vector3.zero;
+        currentSpeed = 0;
+        verticalVelocity = 0;
         targetRotation = Quaternion.identity;
         isGrounded = true;
     }
@@ -29,31 +41,56 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
-
-        var moveDirection = cameraController.GetPlanarRotation() * moveInput;
-        var moveVelocity = moveDirection * moveSpeed * Time.deltaTime;
+        Vector3 moveDirection;
+        SetSpeedAndDirection(out moveDirection);
 
         PerformGroundCheck();
+        ApplyVelocity();
+        MoveTowards(moveDirection);
+        RotateTowards(moveDirection);
 
-        if (isGrounded)
+        animator.SetFloat("moveAmount", currentSpeed / moveSpeed);
+    }
+    private void SetSpeedAndDirection(out Vector3 _moveDirection)
+    {
+        Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+        if (moveInput.magnitude > 0.01f)
         {
-            moveVelocity.y = -0.5f;
+            _moveDirection = cameraController.GetPlanarRotation() * moveInput;
+            lastMoveDirection = _moveDirection;
+            currentSpeed += accelerationSpeed * Time.deltaTime;
         }
         else
         {
-            moveVelocity.y += Physics.gravity.y * Time.deltaTime;
+            _moveDirection = lastMoveDirection;
+            currentSpeed -= decelerationSpeed * Time.deltaTime;
         }
-
-        if (moveInput.magnitude > 0f)
+        currentSpeed = Mathf.Clamp(currentSpeed, 0, moveSpeed);
+    }
+    private void ApplyVelocity()
+    {
+        if (isGrounded)
         {
-            characterController.Move(moveVelocity);
-            targetRotation = Quaternion.LookRotation(moveDirection);
+            verticalVelocity = -0.5f;
         }
-
+        else
+        {
+            verticalVelocity += Physics.gravity.y * Time.deltaTime;
+        }
+    }
+    private void MoveTowards(Vector3 _moveDirection)
+    {
+        Vector3 currentVelocity = _moveDirection * currentSpeed;
+        currentVelocity.y = verticalVelocity;
+        characterController.Move(currentVelocity * Time.deltaTime);
+    }
+    private void RotateTowards(Vector3 _moveDirection)
+    {
+        if (_moveDirection != Vector3.zero)
+        {
+            targetRotation = Quaternion.LookRotation(_moveDirection);
+        }
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-
-        animator.SetFloat("moveAmount", Mathf.Clamp01(moveInput.magnitude), 0.2f, Time.deltaTime);
     }
 
     private void PerformGroundCheck()

@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Locomotion Variables")]
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float accelerationSpeed = 3f;
-    [SerializeField] private float decelerationSpeed = 3f;
+    [SerializeField] private float accelerationSpeed = 5f;
+    [SerializeField] private float decelerationSpeed = 5f;
     [SerializeField] private float rotationSpeed = 500f;
 
     [Header("Ground Check Variables")]
